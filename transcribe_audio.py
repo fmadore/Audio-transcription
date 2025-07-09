@@ -134,7 +134,7 @@ class AudioTranscriber:
                 contents=[prompt, audio_part],
                 config=types.GenerateContentConfig(
                     temperature=0.1,  # Low temperature for more consistent transcription
-                    max_output_tokens=4096,
+                    max_output_tokens=65536,
                 )
             )
             

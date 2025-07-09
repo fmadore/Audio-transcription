@@ -56,4 +56,4 @@ Thumbs.db
 # Audio/*.aac
 
 # Generated transcriptions (optional - uncomment if you don't want to track transcriptions)
-# Transcriptions/*.txt
+Transcriptions

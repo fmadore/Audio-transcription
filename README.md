@@ -6,7 +6,7 @@ This project provides a Python script to transcribe audio files using Google's G
 
 - Transcribes various audio formats (MP3, WAV, M4A, FLAC, OGG, WebM, MP4, AAC)
 - Uses Google Gemini 2.5 Pro for accurate transcription
-- **Interactive prompt selection** - Choose from 7 specialized transcription styles
+- **Interactive prompt selection** - Choose from specialized transcription styles
 - Automatically saves transcriptions as text files
 - Handles multiple speakers and provides formatted output
 - Batch processing of multiple audio files
@@ -28,7 +28,7 @@ pip install -r requirements.txt
 
 ### 2. Configure Your API Key
 
-1. Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
+1. Get your API key from [Google AI Studio](https://aistudio.google.com/app/apikey)
 2. Copy `.env.example` to `.env`:
    ```bash
    copy .env.example .env
@@ -105,9 +105,6 @@ The script includes several pre-built transcription prompts optimized for differ
 - **Meeting**: Focus on action items, decisions, and meeting structure  
 - **Interview**: Question-answer format with conversational flow
 - **Lecture**: Educational content with key concepts highlighted
-- **Technical**: Preserves technical terms and precise language
-- **Medical**: Medical terminology and healthcare-specific formatting
-- **Legal**: Legal terminology with formal language and citations
 
 ### Adding Custom Prompts
 To add your own custom prompt:
@@ -143,9 +140,6 @@ Audio-transcription/
 │   ├── 2_meeting.md        # Meeting-focused prompt
 │   ├── 3_interview.md      # Interview-style prompt
 │   ├── 4_lecture.md        # Educational content prompt
-│   ├── 5_technical.md      # Technical content prompt
-│   ├── 6_medical.md        # Medical/healthcare prompt
-│   └── 7_legal.md          # Legal document prompt
 ├── .env                     # Your API key configuration (create from .env.example)
 ├── .env.example            # Template for environment variables
 ├── .gitignore              # Prevents sensitive files from being committed

@@ -27,14 +27,17 @@ pip install -r requirements.txt
 ### 2. Configure Your API Key
 
 1. Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Edit the `.env` file in the project directory
-3. Replace `your-api-key-here` with your actual API key:
+2. Copy `.env.example` to `.env`:
+   ```bash
+   copy .env.example .env
+   ```
+3. Edit the `.env` file and replace `your-api-key-here` with your actual API key:
 
 ```env
 GEMINI_API_KEY=your-actual-api-key-here
 ```
 
-**Note**: The `.env` file method is more secure and convenient than setting environment variables manually.
+**Security Note**: The `.env` file is included in `.gitignore` to prevent accidentally committing your API key to version control.
 
 ### 3. Add Audio Files
 
@@ -97,10 +100,16 @@ Example custom prompts:
 Audio-transcription/
 ├── Audio/                    # Place your audio files here
 ├── Transcriptions/          # Generated transcriptions appear here
-├── transcribe_audio.py      # Main transcription script
-├── simple_transcribe.py     # Simple example script
-├── requirements.txt         # Python dependencies
-└── README.md               # This file
+├── .env                     # Your API key configuration (create from .env.example)
+├── .env.example            # Template for environment variables
+├── .gitignore              # Prevents sensitive files from being committed
+├── transcribe_audio.py     # Main transcription script
+├── simple_transcribe.py    # Simple example script
+├── test_api.py             # API connection test script
+├── requirements.txt        # Python dependencies
+├── setup.bat              # Windows setup script
+├── setup.ps1              # PowerShell setup script
+└── README.md              # This file
 ```
 
 ## Troubleshooting

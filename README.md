@@ -107,7 +107,7 @@ Available transcription prompts:
 3. Interview
 4. Lecture
 
-Select a prompt (1-7) or press Enter for default:
+Select a prompt (1-4) or press Enter for default:
 ```
 
 The script will then:

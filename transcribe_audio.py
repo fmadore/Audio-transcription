@@ -7,6 +7,8 @@ Transcribes audio files from the Audio folder and saves them as text files.
 import os
 import base64
 import mimetypes
+import os
+import mimetypes
 from pathlib import Path
 from dotenv import load_dotenv
 from google import genai
@@ -42,13 +44,16 @@ class AudioTranscriber:
             '.aac': 'audio/aac'
         }
         
-        # Default transcription prompt
-        self.transcription_prompt = """
+        # Default transcription prompt (fallback)
+        self.default_prompt = """
         Please transcribe the audio content accurately. 
         Include proper punctuation and formatting.
         If there are multiple speakers, indicate speaker changes.
         Provide a clear, readable transcription of the spoken content.
         """
+        
+        # Load transcription prompt from file or user selection
+        self.transcription_prompt = self.select_prompt()
     
     def get_audio_files(self, audio_folder="Audio"):
         """
@@ -230,7 +235,154 @@ class AudioTranscriber:
         
         if successful_transcriptions > 0:
             print(f"\nTranscriptions saved in the '{output_folder}' folder.")
-
+    
+    def get_available_prompts(self, prompts_folder="prompts"):
+        """
+        Get all available prompt files from the prompts folder.
+        
+        Args:
+            prompts_folder (str): Path to the prompts folder
+            
+        Returns:
+            list: List of tuples (number, description, filepath)
+        """
+        prompts_path = Path(prompts_folder)
+        if not prompts_path.exists():
+            print(f"Warning: Prompts folder '{prompts_folder}' not found.")
+            return []
+        
+        prompt_files = []
+        for file_path in prompts_path.iterdir():
+            if file_path.is_file() and file_path.suffix.lower() == '.md':
+                # Extract description from filename (remove number prefix and extension)
+                name_part = file_path.stem
+                if '_' in name_part:
+                    number_part, description = name_part.split('_', 1)
+                    try:
+                        number = int(number_part)
+                        description = description.replace('_', ' ').title()
+                        prompt_files.append((number, description, file_path))
+                    except ValueError:
+                        # If no number prefix, use filename as description
+                        description = name_part.replace('_', ' ').title()
+                        prompt_files.append((0, description, file_path))
+                else:
+                    description = name_part.replace('_', ' ').title()
+                    prompt_files.append((0, description, file_path))
+        
+        return sorted(prompt_files, key=lambda x: x[0])
+    
+    def display_prompt_menu(self, available_prompts):
+        """
+        Display the prompt selection menu.
+        
+        Args:
+            available_prompts (list): List of available prompts
+        """
+        print("\n" + "=" * 50)
+        print("PROMPT SELECTION")
+        print("=" * 50)
+        print("Available transcription prompts:")
+        print()
+        
+        for number, description, _ in available_prompts:
+            if number > 0:
+                print(f"{number}. {description}")
+            else:
+                print(f"   {description}")
+        
+        print()
+    
+    def load_prompt_content(self, prompt_file_path):
+        """
+        Load prompt content from a markdown file.
+        
+        Args:
+            prompt_file_path (Path): Path to the prompt file
+            
+        Returns:
+            str: The prompt content or default prompt if error
+        """
+        try:
+            with open(prompt_file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Extract content after the first markdown header
+            lines = content.split('\n')
+            prompt_lines = []
+            found_header = False
+            
+            for line in lines:
+                if line.startswith('# ') and not found_header:
+                    found_header = True
+                    continue
+                elif found_header and line.strip():
+                    prompt_lines.append(line)
+            
+            if prompt_lines:
+                return '\n'.join(prompt_lines).strip()
+            else:
+                return content.strip()
+                
+        except Exception as e:
+            print(f"Error loading prompt from '{prompt_file_path}': {e}")
+            return self.default_prompt
+    
+    def select_prompt(self, prompts_folder="prompts"):
+        """
+        Allow user to select a transcription prompt.
+        
+        Args:
+            prompts_folder (str): Path to the prompts folder
+            
+        Returns:
+            str: Selected prompt content
+        """
+        available_prompts = self.get_available_prompts(prompts_folder)
+        
+        if not available_prompts:
+            print("No prompt files found. Using default prompt.")
+            return self.default_prompt
+        
+        # Display menu
+        self.display_prompt_menu(available_prompts)
+        
+        # Get user selection
+        numbered_prompts = [(num, desc, path) for num, desc, path in available_prompts if num > 0]
+        
+        if not numbered_prompts:
+            print("No numbered prompts found. Using default prompt.")
+            return self.default_prompt
+        
+        while True:
+            try:
+                choice = input(f"Select a prompt (1-{len(numbered_prompts)}) or press Enter for default: ").strip()
+                
+                if not choice:
+                    print("Using default prompt.")
+                    return self.default_prompt
+                
+                choice_num = int(choice)
+                
+                # Find the prompt with the selected number
+                selected_prompt = None
+                for num, desc, path in numbered_prompts:
+                    if num == choice_num:
+                        selected_prompt = (num, desc, path)
+                        break
+                
+                if selected_prompt:
+                    _, description, prompt_path = selected_prompt
+                    print(f"Selected: {description}")
+                    return self.load_prompt_content(prompt_path)
+                else:
+                    print(f"Invalid choice. Please select a number between 1 and {len(numbered_prompts)}.")
+                    
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+            except KeyboardInterrupt:
+                print("\nUsing default prompt.")
+                return self.default_prompt
 
 def main():
     """
@@ -240,23 +392,13 @@ def main():
     print("=" * 50)
     
     try:
-        # Initialize transcriber
+        # Initialize transcriber (prompt will be loaded from prompt_template.md)
         transcriber = AudioTranscriber()
         
-        # You can customize the transcription prompt here
-        custom_prompt = """
-        Please provide an accurate transcription of this audio file.
-        Format the text with proper punctuation, capitalization, and paragraph breaks.
-        If there are multiple speakers, please indicate speaker changes with "Speaker 1:", "Speaker 2:", etc.
-        If you hear background music or sound effects, you may mention them in [brackets].
-        Focus on clarity and readability of the final transcript.
-        """
-        
-        # Transcribe all audio files
+        # Transcribe all audio files using the prompt from the template file
         transcriber.transcribe_all_audio_files(
             audio_folder="Audio",
-            output_folder="Transcriptions",
-            custom_prompt=custom_prompt
+            output_folder="Transcriptions"
         )
         
     except ValueError as e:

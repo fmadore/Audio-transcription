@@ -6,9 +6,11 @@ This project provides a Python script to transcribe audio files using Google's G
 
 - Transcribes various audio formats (MP3, WAV, M4A, FLAC, OGG, WebM, MP4, AAC)
 - Uses Google Gemini 2.5 Pro for accurate transcription
+- **Interactive prompt selection** - Choose from 7 specialized transcription styles
 - Automatically saves transcriptions as text files
 - Handles multiple speakers and provides formatted output
 - Batch processing of multiple audio files
+- Customizable prompts for different content types
 
 ## Setup
 
@@ -53,26 +55,35 @@ Place your audio files in the `Audio` folder. Supported formats:
 
 ## Usage
 
-### Basic Usage
-
 Run the main transcription script:
 
 ```bash
 python transcribe_audio.py
 ```
 
-This will:
-1. Find all supported audio files in the `Audio` folder
-2. Transcribe each file using Gemini 2.5 Pro
-3. Save transcriptions in the `Transcriptions` folder
+When you run the script, you'll be prompted to select a transcription style:
 
-### Simple Example
-
-For a basic implementation following your template:
-
-```bash
-python simple_transcribe.py
 ```
+PROMPT SELECTION
+==================================================
+Available transcription prompts:
+
+1. General
+2. Meeting  
+3. Interview
+4. Lecture
+5. Technical
+6. Medical
+7. Legal
+
+Select a prompt (1-7) or press Enter for default:
+```
+
+The script will then:
+1. Use your selected prompt style for transcription
+2. Find all supported audio files in the `Audio` folder
+3. Transcribe each file using Gemini 2.5 Pro
+4. Save transcriptions in the `Transcriptions` folder
 
 ## Output
 
@@ -87,12 +98,39 @@ Each transcription file includes:
 
 ## Customization
 
-You can customize the transcription prompt by modifying the `custom_prompt` variable in the `main()` function of `transcribe_audio.py`.
+### Prompt Selection
+The script includes several pre-built transcription prompts optimized for different use cases:
 
-Example custom prompts:
-- For meetings: Focus on speaker identification and action items
-- For interviews: Emphasize question-answer format
-- For lectures: Focus on key concepts and structure
+- **General**: Standard transcription with speaker identification
+- **Meeting**: Focus on action items, decisions, and meeting structure  
+- **Interview**: Question-answer format with conversational flow
+- **Lecture**: Educational content with key concepts highlighted
+- **Technical**: Preserves technical terms and precise language
+- **Medical**: Medical terminology and healthcare-specific formatting
+- **Legal**: Legal terminology with formal language and citations
+
+### Adding Custom Prompts
+To add your own custom prompt:
+
+1. Create a new `.md` file in the `prompts` folder
+2. Name it with a number prefix: `8_custom.md`
+3. Add your prompt content after a markdown header
+4. The script will automatically detect and offer it as an option
+
+Example custom prompt file (`prompts/8_podcast.md`):
+```markdown
+# Podcast Transcription Prompt
+
+Please transcribe this podcast accurately.
+- Identify hosts and guests clearly
+- Include intro/outro music notes in [brackets]
+- Maintain the casual, conversational tone
+- Note any sponsor mentions or advertisements
+- Include audience engagement (laughs, applause) in [brackets]
+```
+
+### Advanced Customization
+You can also modify existing prompts by editing the files in the `prompts` folder, or pass a custom prompt directly in the code.
 
 ## File Structure
 
@@ -100,15 +138,19 @@ Example custom prompts:
 Audio-transcription/
 ├── Audio/                    # Place your audio files here
 ├── Transcriptions/          # Generated transcriptions appear here
+├── prompts/                 # Transcription prompt templates
+│   ├── 1_general.md        # General transcription prompt
+│   ├── 2_meeting.md        # Meeting-focused prompt
+│   ├── 3_interview.md      # Interview-style prompt
+│   ├── 4_lecture.md        # Educational content prompt
+│   ├── 5_technical.md      # Technical content prompt
+│   ├── 6_medical.md        # Medical/healthcare prompt
+│   └── 7_legal.md          # Legal document prompt
 ├── .env                     # Your API key configuration (create from .env.example)
 ├── .env.example            # Template for environment variables
 ├── .gitignore              # Prevents sensitive files from being committed
 ├── transcribe_audio.py     # Main transcription script
-├── simple_transcribe.py    # Simple example script
-├── test_api.py             # API connection test script
 ├── requirements.txt        # Python dependencies
-├── setup.bat              # Windows setup script
-├── setup.ps1              # PowerShell setup script
 └── README.md              # This file
 ```
 

@@ -5,7 +5,7 @@ This project provides two ways to transcribe audio files using Google's Gemini 2
 ## 🚀 Quick Start Options
 
 ### Option 1: Google Colab (Recommended for beginners)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/your-username/Audio-transcription/blob/main/Audio_Transcription_Colab.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fmadore/Audio-transcription/blob/main/Audio_Transcription_Colab.ipynb)
 
 **No setup required!** Click the button above to start transcribing immediately in your browser.
 

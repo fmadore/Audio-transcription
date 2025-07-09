@@ -3,61 +3,24 @@
 
 # Python
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
+*.pyc
+*.pyo
+*.pyd
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
 
 # Virtual environments
 venv/
 .venv/
 env/
-ENV/
-env.bak/
-venv.bak/
-pyvenv.cfg
-Lib/
-Scripts/
-Include/
 
 # IDE
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Audio files (optional - uncomment if you don't want to track audio files)
-# Audio/*.mp3
-# Audio/*.wav
-# Audio/*.m4a
-# Audio/*.flac
-# Audio/*.ogg
-# Audio/*.webm
-# Audio/*.mp4
-# Audio/*.aac
-
-# Generated transcriptions (optional - uncomment if you don't want to track transcriptions)
-Transcriptions
+# Optional: Uncomment if you don't want to track audio files or transcriptions
+Audio/
+Transcriptions/

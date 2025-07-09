@@ -1,0 +1,98 @@
+name: Validate Colab Notebook
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths: 
+      - '**.ipynb'
+  pull_request:
+    branches: [ main ]
+    paths: 
+      - '**.ipynb'
+
+jobs:
+  validate-notebook:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install nbformat jupyter
+    
+    - name: Validate notebook format
+      run: |
+        python -c "
+        import nbformat
+        import sys
+        
+        try:
+            with open('Audio_Transcription_Colab.ipynb', 'r') as f:
+                nb = nbformat.read(f, as_version=4)
+            print('✅ Notebook format is valid')
+        except Exception as e:
+            print(f'❌ Notebook validation failed: {e}')
+            sys.exit(1)
+        "
+    
+    - name: Check notebook metadata
+      run: |
+        python -c "
+        import nbformat
+        import json
+        
+        with open('Audio_Transcription_Colab.ipynb', 'r') as f:
+            nb = nbformat.read(f, as_version=4)
+        
+        # Check if it's a Colab notebook
+        if 'colab' not in nb.metadata:
+            print('⚠️ Warning: Notebook missing Colab metadata')
+        else:
+            print('✅ Colab metadata found')
+        
+        # Check for required cells
+        required_sections = ['setup', 'api_key', 'transcriber_class', 'upload_files']
+        found_sections = []
+        
+        for cell in nb.cells:
+            if cell.cell_type == 'code' and 'metadata' in cell and 'id' in cell.metadata:
+                found_sections.append(cell.metadata['id'])
+        
+        missing = [section for section in required_sections if section not in found_sections]
+        if missing:
+            print(f'⚠️ Warning: Missing sections: {missing}')
+        else:
+            print('✅ All required sections found')
+        "
+
+  test-colab-link:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Test Colab URL
+      run: |
+        # Extract GitHub info
+        REPO_URL="https://github.com/${{ github.repository }}"
+        COLAB_URL="https://colab.research.google.com/github/${{ github.repository }}/blob/main/Audio_Transcription_Colab.ipynb"
+        
+        echo "Repository: $REPO_URL"
+        echo "Colab URL: $COLAB_URL"
+        
+        # Test if the file exists
+        if [ -f "Audio_Transcription_Colab.ipynb" ]; then
+            echo "✅ Notebook file exists"
+            echo "🔗 Colab link: $COLAB_URL"
+        else
+            echo "❌ Notebook file not found"
+            exit 1
+        fi

@@ -1,18 +1,45 @@
 # Audio Transcription with Google Gemini 2.5 Pro
 
-This project provides a Python script to transcribe audio files using Google's Gemini 2.5 Pro model.
+This project provides two ways to transcribe audio files using Google's Gemini 2.5 Pro model:
+
+## 🚀 Quick Start Options
+
+### Option 1: Google Colab (Recommended for beginners)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/your-username/Audio-transcription/blob/main/Audio_Transcription_Colab.ipynb)
+
+**No setup required!** Click the button above to start transcribing immediately in your browser.
+
+- ✅ **Works anywhere** - No installation needed
+- ✅ **Cross-platform** - Windows, Mac, Linux, mobile
+- ✅ **Interactive interface** - User-friendly widgets
+- ✅ **Secure** - Your API key stays private
+
+### Option 2: Local Python Script
+For developers who prefer running locally or need automation.
 
 ## Features
 
 - Transcribes various audio formats (MP3, WAV, M4A, FLAC, OGG, WebM, MP4, AAC)
 - Uses Google Gemini 2.5 Pro for accurate transcription
-- **Interactive prompt selection** - Choose from specialized transcription styles
+- **Interactive prompt selection** - Choose from 7 specialized transcription styles
 - Automatically saves transcriptions as text files
 - Handles multiple speakers and provides formatted output
 - Batch processing of multiple audio files
 - Customizable prompts for different content types
 
-## Setup
+## 🎯 Transcription Styles
+
+Both versions offer specialized prompts optimized for different content types:
+
+- **General** - Standard transcription with speaker identification
+- **Meeting** - Business meetings with action items and decisions
+- **Interview** - Q&A format with conversational flow
+- **Lecture** - Educational content with key concepts
+- **Technical** - Precise terminology and specifications
+- **Medical** - Healthcare terminology and clinical accuracy
+- **Legal** - Formal language and legal terminology
+
+## 🔧 Local Setup (Option 2)
 
 ### 1. Install Dependencies
 
@@ -53,8 +80,15 @@ Place your audio files in the `Audio` folder. Supported formats:
 - MP4 (.mp4)
 - AAC (.aac)
 
-## Usage
+## 📋 Usage
 
+### Google Colab Version
+1. Click the "Open in Colab" badge at the top
+2. Follow the step-by-step notebook cells
+3. Upload your audio files directly in the browser
+4. Download transcriptions with one click
+
+### Local Python Script
 Run the main transcription script:
 
 ```bash
@@ -72,9 +106,6 @@ Available transcription prompts:
 2. Meeting  
 3. Interview
 4. Lecture
-5. Technical
-6. Medical
-7. Legal
 
 Select a prompt (1-7) or press Enter for default:
 ```
@@ -145,8 +176,43 @@ Audio-transcription/
 ├── .gitignore              # Prevents sensitive files from being committed
 ├── transcribe_audio.py     # Main transcription script
 ├── requirements.txt        # Python dependencies
+├── Audio_Transcription_Colab.ipynb  # Google Colab notebook
+├── README_Colab.md         # Colab-specific documentation
+├── setup_github.py         # GitHub deployment script
 └── README.md              # This file
 ```
+
+## 🚀 Deploy Your Own Colab Version
+
+Want to create your own GitHub repository with the Colab notebook? Use our automated setup script:
+
+### Prerequisites
+1. **Git** - [Download here](https://git-scm.com/downloads)
+2. **GitHub CLI** - [Download here](https://cli.github.com/)
+3. **GitHub account** - [Sign up here](https://github.com/)
+
+### Quick Setup
+```bash
+# 1. Clone this repository
+git clone https://github.com/your-username/Audio-transcription.git
+cd Audio-transcription
+
+# 2. Authenticate with GitHub
+gh auth login
+
+# 3. Run the setup script
+python setup_github.py
+```
+
+The script will:
+- ✅ Create a new GitHub repository
+- ✅ Copy the Colab notebook and documentation
+- ✅ Update all links with your repository information
+- ✅ Push everything to GitHub
+- ✅ Provide your custom Colab link
+
+### Windows Users
+Double-click `setup_github.bat` for a guided setup experience.
 
 ## Troubleshooting
 
@@ -161,6 +227,11 @@ Audio-transcription/
 ### Large Files
 - Gemini 2.5 Pro has file size limits
 - Consider breaking large audio files into smaller segments
+
+### Colab Issues
+- **Runtime disconnected**: Restart runtime and re-run setup cells
+- **API quota exceeded**: Check your Gemini API usage limits
+- **File upload fails**: Try smaller files or refresh the page
 
 ## API Reference
 
